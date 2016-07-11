@@ -1,0 +1,22 @@
+{
+  "name": "who",
+  "version": "0.1.0",
+  "description": "Who is this ?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "who",
+    "user",
+    "mongoose",
+    "authentication",
+    "session"
+  ],
+  "author": "ymartoglio",
+  "license": "MIT",
+  "dependencies": {
+    "merge": "^1.2.0",
+    "promise": "^7.1.1"
+  }
+}
