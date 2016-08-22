@@ -1,8 +1,10 @@
-const Who = require('./src/who.js'),
-      WhoSession = require('./src/who-session.js');
+const who = require('./src/who.js'),
+      whoSession = require('./src/who-session.js'),
+      whoBasic = require('./src/who-basic.js');
 
 module.exports = {
-    who : Who,
-    whoSession : WhoSession
+    who : who,
+    session : whoSession,
+    basic : whoBasic
 };
 

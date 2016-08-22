@@ -16,6 +16,7 @@
   "author": "ymartoglio",
   "license": "MIT",
   "dependencies": {
+    "basic-auth": "^1.0.4",
     "merge": "^1.2.0",
     "promise": "^7.1.1"
   }

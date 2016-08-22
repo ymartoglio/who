@@ -5,7 +5,6 @@ var Promise = require('promise'),
 // allow crypt password
 // allow other mongodb driver
 // open option object
-// filter password before using data
 
 
 const DEFAULT_WHO_MONGOOSE_SCHEMA = "User";
@@ -51,23 +50,22 @@ exports.check = function(mongoose,who,options)  {
     options = merge({},defaultOptions,options || {});
     if(mongoose){
         if(checkWhoDataInput(who)){
-                var userQuery = getUser(mongoose,who);
-                if(userQuery){
-                    var userPromise = userQuery.exec();
-                    return userPromise.then(function(user){
-                        if(user){
-                            if(typeof(options.passwordCheck) === 'function'){
-                                if(options.passwordCheck(who,user)){
-                                    return user;
-                                }
+            var userQuery = getUser(mongoose,who);
+            if(userQuery){
+                var userPromise = userQuery.exec();
+                return userPromise.then(function(user){
+                    if(user){
+                        if(typeof(options.passwordCheck) === 'function'){
+                            if(options.passwordCheck(who,user)){
+                                return user;
                             }
                         }
-                        return null;
                     }
-                    ,function(error){
-                        return error;
-                    });
-                }
+                    return null;
+                },function(error){
+                    return error;
+                });
+            }
         }else{
             console.error("Who is nobody");
             return new Promise(function(resolve,reject){
