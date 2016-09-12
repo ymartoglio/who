@@ -21,9 +21,15 @@ var defaultOptions = {
     passwordCheck : passwordCheck
 };
 
-
-function getUser(mongoose,who){
-    var userModel = mongoose.model(DEFAULT_WHO_MONGOOSE_SCHEMA);
+/**
+ * Find a user in 'userCollection', corresponding to 'who.login'
+ * @param mongoose
+ * @param who
+ * @param userCollection
+ * @returns {*}
+ */
+function getUser(mongoose,who,userCollection){
+    var userModel = mongoose.model(userCollection);
     var criteria = new Object();
     if(who.login && typeof(who.login) === typeof("string") && who.login != ""){
         criteria[DEFAULT_WHO_USER_LOGIN] = who.login;
@@ -32,6 +38,12 @@ function getUser(mongoose,who){
     return null;
 }
 
+/**
+ * Check if the password of the found user is matching with the 'who.password' parameter
+ * @param who
+ * @param user
+ * @returns {boolean}
+ */
 function passwordCheck(who,user){
     return (user[DEFAULT_WHO_USER_PASSWORD] === who.password);
 }
@@ -41,16 +53,18 @@ function checkWhoDataInput(who){
             who.password && typeof(who.password) === 'string')
 }
 
-/*
-    mongoose : mongoose instance
-    who : object {login:"",password:""}
-    return a Mongoose promise of a user
-*/
+/**
+ * Check if a user represented by the 'who' object in the mongodb collection, accessed through the mongoose descriptor, described in 'options.mongoose' object exists.
+ * @param mongoose - mongoose connection object descriptor
+ * @param who - object with a 'login' and a 'password' property
+ * @param options
+ * @returns {*} - a Promise object returning a user mongoose's model instance, or a rejected Promise
+ */
 exports.check = function(mongoose,who,options)  {
     options = merge({},defaultOptions,options || {});
     if(mongoose){
         if(checkWhoDataInput(who)){
-            var userQuery = getUser(mongoose,who);
+            var userQuery = getUser(mongoose,who,options.mongoose.schema);
             if(userQuery){
                 var userPromise = userQuery.exec();
                 return userPromise.then(function(user){
